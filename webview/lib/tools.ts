@@ -73,6 +73,13 @@ export function resizeGrid(
     return out;
 }
 
+/** Makes every cell transparent; returns whether any cell was painted. */
+export function clearGrid(grid: Int8Array): boolean {
+    const painted = grid.some((value) => value >= 0);
+    grid.fill(-1);
+    return painted;
+}
+
 /** Cells using an index the palette no longer has become transparent. */
 export function dropMissingColours(grid: Int8Array, count: number): Int8Array {
     return grid.map((value) => (value >= count ? -1 : value));

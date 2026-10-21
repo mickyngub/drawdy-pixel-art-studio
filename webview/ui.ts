@@ -4,6 +4,8 @@ const LABEL = "text-[10px] tracking-[0.02em] text-muted-foreground";
 const INPUT =
     "h-6 rounded-sm border border-border bg-background py-0.5 text-[11px] focus:border-primary focus:outline-none disabled:opacity-40";
 const SEG_BUTTON = `min-w-0 flex-auto cursor-pointer truncate rounded-sm border border-border px-1.5 py-[3px] text-[10px] text-muted-foreground hover:text-foreground aria-pressed:border-primary aria-pressed:bg-primary aria-pressed:text-primary-foreground ${FOCUS}`;
+const ACTION_BUTTON =
+    "min-w-0 flex-auto cursor-pointer truncate rounded-sm border border-border px-1.5 py-[3px] text-[10px] text-muted-foreground enabled:hover:text-foreground disabled:cursor-default disabled:opacity-40";
 const SWATCH =
     "aspect-square min-w-0 cursor-pointer rounded-[3px] p-0 ring-1 ring-black/20 ring-inset [background:var(--swatch)] aria-pressed:outline-2 aria-pressed:outline-offset-1 aria-pressed:outline-foreground";
 
@@ -84,6 +86,17 @@ export function makeToggle(
     };
     paint(initial);
     return { set: paint };
+}
+
+export function makeAction(
+    parent: HTMLElement,
+    caption: string,
+    tip: string,
+    onClick: () => void
+): HTMLButtonElement {
+    const node = button(parent, ACTION_BUTTON, caption, onClick);
+    node.title = tip;
+    return node;
 }
 
 export function makeInlineSelect(

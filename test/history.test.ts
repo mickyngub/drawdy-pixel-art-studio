@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import { createHistory } from "../webview/lib/history";
+import { clearGrid } from "../webview/lib/tools";
 
 test("undo returns the state before the last change, redo the one after", () => {
     const history = createHistory<string>();
@@ -39,4 +40,17 @@ test("clear forgets both stacks", () => {
     history.clear();
     assert.equal(history.undo("x"), null);
     assert.equal(history.redo("x"), null);
+});
+
+test("clear is one undo entry: undo brings every pixel back, redo clears again", () => {
+    const history = createHistory<Int8Array>();
+    let grid: Int8Array = new Int8Array([0, -1, 3, 7]);
+    const before = grid.slice();
+    if (clearGrid(grid)) history.push(before);
+    assert.deepEqual([...grid], [-1, -1, -1, -1]);
+    grid = history.undo(grid) as Int8Array;
+    assert.deepEqual([...grid], [0, -1, 3, 7]);
+    assert.equal(history.undo(grid), null);
+    grid = history.redo(grid) as Int8Array;
+    assert.deepEqual([...grid], [-1, -1, -1, -1]);
 });

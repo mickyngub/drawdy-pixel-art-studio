@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 import {
     bresenham,
+    clearGrid,
     dropMissingColours,
     floodFill,
     mirrorX,
@@ -93,4 +94,12 @@ test("cells past the new palette's length become transparent", () => {
     const grid = gridOf(["0369"]);
     assert.deepEqual([...dropMissingColours(grid, 4)], [0, 3, -1, -1]);
     assert.deepEqual([...grid], [0, 3, 6, 9]);
+});
+
+test("clear makes every cell transparent and reports whether anything was painted", () => {
+    const grid = gridOf(["1.", ".2"]);
+    assert.equal(clearGrid(grid), true);
+    assert.deepEqual([...grid], [-1, -1, -1, -1]);
+    assert.equal(clearGrid(grid), false);
+    assert.deepEqual([...grid], [-1, -1, -1, -1]);
 });

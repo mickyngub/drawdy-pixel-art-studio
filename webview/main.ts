@@ -16,6 +16,7 @@ import { isField, keyAction } from "./lib/keys";
 import { DEFAULT_CUSTOM, PALETTE_NAMES, PALETTES } from "./lib/palettes";
 import {
     bresenham,
+    clearGrid,
     dropMissingColours,
     floodFill,
     mirrorX,
@@ -23,6 +24,7 @@ import {
     type Point,
 } from "./lib/tools";
 import {
+    makeAction,
     makeColourInput,
     makeInlineSelect,
     makeSegmented,
@@ -125,6 +127,12 @@ makeToggle(
         schedulePaint();
     }
 );
+const clearButton = makeAction(
+    toolsRow,
+    "Clear",
+    "Clear: make every cell transparent",
+    clearAll
+);
 const sizeControl = makeInlineSelect(
     optionsRow,
     "Size",
@@ -177,6 +185,7 @@ function syncPalette(): void {
 
 function updateChrome(): void {
     const empty = isBlank();
+    clearButton.disabled = empty;
     placeButton.disabled = empty || busy;
     updateButton.disabled = empty || busy;
     placeButton.textContent = editing ? "Place as new" : "Place on board";
@@ -288,6 +297,12 @@ function commit(before: Doc): void {
     history.push(before);
     updateChrome();
     schedulePaint();
+}
+
+function clearAll(): void {
+    if (drag) return;
+    const before = copyDoc(doc);
+    if (clearGrid(doc.grid)) commit(before);
 }
 
 function onPointerDown(event: PointerEvent): void {
