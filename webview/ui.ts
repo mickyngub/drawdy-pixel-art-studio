@@ -131,13 +131,13 @@ export function makeColourInput(
 ): Control<string> & { wrap: HTMLElement } {
     const wrap = el(
         "label",
-        `ml-auto flex items-center gap-1.5 ${LABEL}`,
+        `flex basis-full items-center gap-1.5 ${LABEL}`,
         parent
     );
     wrap.append(label);
     const input = el(
         "input",
-        `h-6 w-8 cursor-pointer rounded-sm border border-border bg-background p-0.5 ${FOCUS}`,
+        `h-6 min-w-0 flex-1 cursor-pointer rounded-sm border border-border bg-background p-0.5 ${FOCUS}`,
         wrap
     );
     input.type = "color";

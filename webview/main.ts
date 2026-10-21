@@ -13,7 +13,13 @@ import {
 import { cellCanvas, exportPng, type Rgb } from "./export";
 import { createHistory } from "./lib/history";
 import { isField, keyAction } from "./lib/keys";
-import { DEFAULT_CUSTOM, PALETTE_NAMES, PALETTES } from "./lib/palettes";
+import {
+    DEFAULT_CUSTOM,
+    nearestIndex,
+    PALETTE_NAMES,
+    PALETTES,
+    remapPixels,
+} from "./lib/palettes";
 import {
     bresenham,
     clearGrid,
@@ -108,7 +114,7 @@ const toolControl = makeSegmented<Tool>(
         ["pencil", "Pencil", "Pencil: paint cells"],
         ["eraser", "Eraser", "Eraser: clear cells"],
         ["fill", "Fill", "Fill: flood an area with the colour"],
-        ["picker", "Picker", "Eyedropper: pick a colour from the grid"],
+        ["picker", "Pick", "Eyedropper: pick a colour from the grid"],
         ["line", "Line", "Line: drag from one end to the other"],
     ],
     tool,
@@ -375,12 +381,11 @@ function changeSize(size: GridSize): void {
 
 function changePalette(id: PaletteId): void {
     if (id === doc.paletteId || drag) return;
+    const from = colorsOf(doc.paletteId);
+    const to = colorsOf(id);
     history.push(copyDoc(doc));
-    show({
-        ...doc,
-        paletteId: id,
-        grid: dropMissingColours(doc.grid, colorsOf(id).length),
-    });
+    colour = nearestIndex(from[colour], to);
+    show({ ...doc, paletteId: id, grid: remapPixels(doc.grid, from, to) });
     scheduleSettings();
 }
 

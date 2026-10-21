@@ -13,16 +13,16 @@ const BODY = `
     <button type="button" id="stop-edit" class="cursor-pointer text-primary underline underline-offset-2 hover:no-underline ${FOCUS}">Stop editing</button>
 </div>
 <main class="flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto px-4 py-2.5">
-    <div id="tools" role="toolbar" aria-label="Tools" class="flex flex-none gap-[3px]"></div>
+    <div id="tools" role="toolbar" aria-label="Tools" class="grid flex-none grid-cols-4 gap-1"></div>
     <canvas id="grid" class="block aspect-square w-full flex-none cursor-crosshair touch-none rounded-sm ring-1 ring-border" aria-label="Pixel grid"></canvas>
-    <div id="options" class="flex flex-none items-center gap-3"></div>
+    <div id="options" class="flex flex-none flex-wrap items-center gap-x-3 gap-y-2"></div>
     <div id="swatches" role="group" aria-label="Colours" class="grid flex-none grid-cols-16 gap-0.5 data-many:grid-cols-20"></div>
 </main>
 <footer class="flex flex-none flex-col gap-1.5 border-t border-border px-3 py-2">
     <div id="status" role="status" aria-live="polite" class="min-h-7 text-[10px] text-muted-foreground data-[tone=bad]:text-destructive data-[tone=good]:text-success"></div>
     <div id="actions" class="group grid grid-cols-3 gap-2">
-        <button type="button" id="edit-selected" class="${BUTTON} col-start-2 group-data-[editing=true]:col-start-1" hidden>Edit selected</button>
-        <button type="button" id="place" class="${PRIMARY} ${SECONDARY_WHEN_EDITING} col-start-3 group-data-[editing=true]:col-start-2" disabled>Place on board</button>
+        <button type="button" id="edit-selected" class="${BUTTON} col-start-1" hidden>Edit selected</button>
+        <button type="button" id="place" class="${PRIMARY} ${SECONDARY_WHEN_EDITING} col-start-2 col-end-4 group-data-[editing=true]:col-end-3" disabled>Place on board</button>
         <button type="button" id="update" class="${PRIMARY} col-start-3" hidden>Update</button>
     </div>
 </footer>
