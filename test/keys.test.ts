@@ -11,7 +11,7 @@ const key = (key: string, mods: Partial<Record<string, boolean>> = {}) => ({
     ...mods,
 });
 
-test("⌘Z and Ctrl+Z undo on the board when focus is not in a field", () => {
+test("⌘Z and Ctrl+Z undo the grid; ⌘⇧Z, Ctrl+⇧Z and Ctrl+Y redo it", () => {
     assert.equal(keyAction(key("z", { metaKey: true }), false), "undo");
     assert.equal(keyAction(key("z", { ctrlKey: true }), false), "undo");
     assert.equal(
@@ -23,12 +23,17 @@ test("⌘Z and Ctrl+Z undo on the board when focus is not in a field", () => {
         "redo"
     );
     assert.equal(keyAction(key("y", { ctrlKey: true }), false), "redo");
+    assert.equal(keyAction(key("y", { metaKey: true }), false), null);
     assert.equal(keyAction(key("z"), false), null);
+    assert.equal(
+        keyAction(key("z", { metaKey: true, altKey: true }), false),
+        null
+    );
 });
 
-test("inside a field the browser keeps its own undo", () => {
-    assert.equal(keyAction(key("z", { metaKey: true }), true), null);
-    assert.equal(keyAction(key("y", { ctrlKey: true }), true), null);
+test("grid undo and redo also work while a select has focus", () => {
+    assert.equal(keyAction(key("z", { metaKey: true }), true), "undo");
+    assert.equal(keyAction(key("y", { ctrlKey: true }), true), "redo");
 });
 
 test("Escape leaves a field instead of closing the panel", () => {

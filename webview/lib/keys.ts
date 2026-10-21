@@ -8,12 +8,10 @@ type Keys = {
     altKey: boolean;
 };
 
-/** Board undo and redo from the panel, except inside fields, where the browser's own undo stays. */
+/** Undo and redo act on the pixel grid wherever focus is in the panel; the board's own history is left to the board. */
 export function keyAction(event: Keys, inField: boolean): KeyAction {
     if (event.key === "Escape") return inField ? "blur" : "close";
-    if (inField || event.altKey || !(event.metaKey || event.ctrlKey)) {
-        return null;
-    }
+    if (event.altKey || !(event.metaKey || event.ctrlKey)) return null;
     const key = event.key.toLowerCase();
     if (key === "z") return event.shiftKey ? "redo" : "undo";
     if (key === "y" && event.ctrlKey && !event.metaKey) return "redo";
