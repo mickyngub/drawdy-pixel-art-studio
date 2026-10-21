@@ -14,7 +14,9 @@ const BODY = `
 </div>
 <main class="flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto px-4 py-2.5">
     <div id="tools" role="toolbar" aria-label="Tools" class="grid flex-none grid-cols-4 gap-1"></div>
-    <canvas id="grid" class="block aspect-square w-full flex-none cursor-crosshair touch-none rounded-sm ring-1 ring-border" aria-label="Pixel grid"></canvas>
+    <div id="grid-area" class="flex min-h-0 flex-1 items-center justify-center">
+        <canvas id="grid" class="block size-[var(--side,0px)] flex-none cursor-crosshair touch-none rounded-sm ring-1 ring-border" aria-label="Pixel grid"></canvas>
+    </div>
     <div id="options" class="flex flex-none flex-wrap items-center gap-x-3 gap-y-2"></div>
     <div id="swatches" role="group" aria-label="Colours" class="grid flex-none grid-cols-16 gap-0.5 data-many:grid-cols-20"></div>
 </main>

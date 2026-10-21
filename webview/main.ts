@@ -73,6 +73,7 @@ const byId = <T extends HTMLElement>(id: string) =>
 const banner = byId<HTMLDivElement>("edit-banner");
 const stopEditButton = byId<HTMLButtonElement>("stop-edit");
 const toolsRow = byId<HTMLDivElement>("tools");
+const gridArea = byId<HTMLDivElement>("grid-area");
 const gridCanvas = byId<HTMLCanvasElement>("grid");
 const optionsRow = byId<HTMLDivElement>("options");
 const swatchGrid = byId<HTMLDivElement>("swatches");
@@ -199,6 +200,14 @@ function updateChrome(): void {
     placeButton.textContent = editing ? "Place new" : "Place on board";
     updateButton.hidden = !editing;
     banner.hidden = !editing;
+}
+
+// The grid gives up height first, so the tools, options, swatches and footer never scroll out of view.
+function fitGrid(): void {
+    const side = Math.floor(
+        Math.min(gridArea.clientWidth, gridArea.clientHeight)
+    );
+    gridCanvas.style.setProperty("--side", `${Math.max(0, side)}px`);
 }
 
 function schedulePaint(): void {
@@ -505,6 +514,7 @@ function wire(): void {
     gridCanvas.addEventListener("contextmenu", (event) =>
         event.preventDefault()
     );
+    new ResizeObserver(fitGrid).observe(gridArea);
     new ResizeObserver(schedulePaint).observe(gridCanvas);
     document.addEventListener("keydown", (event) => {
         const action = keyAction(event, isField(event.target));
