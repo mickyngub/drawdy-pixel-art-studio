@@ -64,7 +64,6 @@ const api = acquireDrawdyApi();
 const byId = <T extends HTMLElement>(id: string) =>
     document.getElementById(id) as T;
 
-const closeButton = byId<HTMLButtonElement>("close");
 const banner = byId<HTMLDivElement>("edit-banner");
 const stopEditButton = byId<HTMLButtonElement>("stop-edit");
 const toolsRow = byId<HTMLDivElement>("tools");
@@ -73,6 +72,7 @@ const optionsRow = byId<HTMLDivElement>("options");
 const swatchGrid = byId<HTMLDivElement>("swatches");
 const statusLine = byId<HTMLDivElement>("status");
 const editSelectedButton = byId<HTMLButtonElement>("edit-selected");
+const actions = byId<HTMLDivElement>("actions");
 const placeButton = byId<HTMLButtonElement>("place");
 const updateButton = byId<HTMLButtonElement>("update");
 
@@ -188,8 +188,9 @@ function updateChrome(): void {
     clearButton.disabled = empty;
     placeButton.disabled = empty || busy;
     updateButton.disabled = empty || busy;
-    placeButton.textContent = editing ? "Place as new" : "Place on board";
-    placeButton.dataset.editing = String(editing);
+    actions.dataset.editing = String(editing);
+    editSelectedButton.textContent = editing ? "Edit" : "Edit selected";
+    placeButton.textContent = editing ? "Place new" : "Place on board";
     updateButton.hidden = !editing;
     banner.hidden = !editing;
 }
@@ -472,13 +473,10 @@ function loadSpec(spec: PixelSpec): void {
             colorsOf(spec.palette.id).length
         ),
     });
-    setStatus(
-        "Loaded the selected pixel art. Change it, then click Update on board."
-    );
+    setStatus("Loaded the selected pixel art. Change it, then click Update.");
 }
 
 function wire(): void {
-    closeButton.addEventListener("click", () => send({ type: "close" }));
     placeButton.addEventListener("click", () => sendArt("place"));
     updateButton.addEventListener("click", () => sendArt("update"));
     editSelectedButton.addEventListener("click", () => {

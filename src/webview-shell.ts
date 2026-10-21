@@ -2,14 +2,12 @@ import { PANEL_CSS } from "./panel-css";
 
 const FOCUS =
     "focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-primary";
-const BUTTON = `cursor-pointer rounded-sm border border-border px-2.5 py-1 text-[11px] enabled:hover:border-foreground disabled:cursor-default disabled:opacity-40 ${FOCUS}`;
-const PRIMARY = `cursor-pointer rounded-sm border border-primary bg-primary px-2.5 py-1 text-[11px] font-medium text-primary-foreground enabled:hover:opacity-90 disabled:cursor-default disabled:opacity-40 data-[editing=true]:border-border data-[editing=true]:bg-transparent data-[editing=true]:font-normal data-[editing=true]:text-foreground ${FOCUS}`;
+const BUTTON = `row-start-1 min-w-0 cursor-pointer truncate rounded-sm border border-border px-1.5 py-1 text-[11px] enabled:hover:border-foreground disabled:cursor-default disabled:opacity-40 ${FOCUS}`;
+const PRIMARY = `row-start-1 min-w-0 cursor-pointer truncate rounded-sm border border-primary bg-primary px-1.5 py-1 text-[11px] font-medium text-primary-foreground enabled:hover:opacity-90 disabled:cursor-default disabled:opacity-40 ${FOCUS}`;
+const SECONDARY_WHEN_EDITING =
+    "group-data-[editing=true]:border-border group-data-[editing=true]:bg-transparent group-data-[editing=true]:font-normal group-data-[editing=true]:text-foreground";
 
 const BODY = `
-<header class="flex flex-none items-center justify-between gap-2 border-b border-border px-3 py-1.5">
-    <h1 class="text-[13px] font-semibold">Pixel Art Studio</h1>
-    <button type="button" id="close" class="${BUTTON}">Close</button>
-</header>
 <div id="edit-banner" class="flex flex-none items-center justify-between gap-2 border-b border-border bg-surface2 px-3 py-1.5 text-[11px]" hidden>
     <span>Editing pixel art from the board.</span>
     <button type="button" id="stop-edit" class="cursor-pointer text-primary underline underline-offset-2 hover:no-underline ${FOCUS}">Stop editing</button>
@@ -22,10 +20,10 @@ const BODY = `
 </main>
 <footer class="flex flex-none flex-col gap-1.5 border-t border-border px-3 py-2">
     <div id="status" role="status" aria-live="polite" class="min-h-7 text-[10px] text-muted-foreground data-[tone=bad]:text-destructive data-[tone=good]:text-success"></div>
-    <div class="flex justify-end gap-1.5">
-        <button type="button" id="edit-selected" class="${BUTTON}" hidden>Edit selected</button>
-        <button type="button" id="place" class="${PRIMARY}" disabled>Place on board</button>
-        <button type="button" id="update" class="${PRIMARY}" hidden>Update on board</button>
+    <div id="actions" class="group grid grid-cols-3 gap-2">
+        <button type="button" id="edit-selected" class="${BUTTON} col-start-2 group-data-[editing=true]:col-start-1" hidden>Edit selected</button>
+        <button type="button" id="place" class="${PRIMARY} ${SECONDARY_WHEN_EDITING} col-start-3 group-data-[editing=true]:col-start-2" disabled>Place on board</button>
+        <button type="button" id="update" class="${PRIMARY} col-start-3" hidden>Update</button>
     </div>
 </footer>
 `;
