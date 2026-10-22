@@ -2,7 +2,7 @@
     "driverId": "mickyngub.pixel-art-studio",
     "driverName": "Pixel Art Studio",
     "driverVersion": "1.0.0",
-    "description": "Draw pixel art right on the board. Paint on a 16 to 64 pixel grid with the PICO-8, Game Boy or NES palette, or mix your own 16 colours. Use the pencil, eraser, fill, eyedropper and line tools, with mirror drawing for symmetric sprites. Place it as a crisp image with a transparent background. Select it later to keep drawing and update it in place.",
+    "description": "Draw pixel art and place it on the board as a crisp image with a transparent background. Paint on a 16 to 64 pixel grid with the PICO-8, Game Boy or NES palette, or 16 colours of your own, using the pencil, eraser, fill, eyedropper and line tools, with mirror drawing for symmetric sprites. Switching palette moves your pixels to the nearest colours. Select placed art later to keep drawing and update it in place.",
     "icon": "icon.png",
     "main": "main.js",
     "permissions": ["dom", "scene", "storage"]
