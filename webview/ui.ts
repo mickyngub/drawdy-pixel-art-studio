@@ -1,13 +1,17 @@
+import { ICONS, icon } from "./lib/icons";
+
 const FOCUS =
-    "focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-primary";
-const LABEL = "text-[10px] tracking-[0.02em] text-muted-foreground";
-const INPUT =
-    "h-6 rounded-sm border border-border bg-background py-0.5 text-[11px] focus:border-primary focus:outline-none disabled:opacity-40";
-const SEG_BUTTON = `min-w-0 flex-auto cursor-pointer truncate rounded-sm border border-border px-1.5 py-[3px] text-[10px] text-muted-foreground hover:text-foreground aria-pressed:border-primary aria-pressed:bg-primary aria-pressed:text-primary-foreground ${FOCUS}`;
-const ACTION_BUTTON =
-    "min-w-0 flex-auto cursor-pointer truncate rounded-sm border border-border px-1.5 py-[3px] text-[10px] text-muted-foreground enabled:hover:text-foreground disabled:cursor-default disabled:opacity-40";
+    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring";
+const LABEL = "text-label text-fg-muted";
+const SELECT =
+    "h-8 w-full cursor-pointer appearance-none rounded-lg border border-line bg-subtle pr-8 pl-3 text-label text-fg transition-colors hover:bg-hover focus:border-line-strong focus:bg-active focus:outline-none focus:ring-1 focus:ring-ring";
+const TRACK = "flex h-8 flex-none gap-0.5 rounded-lg bg-control-subtle p-0.5";
+const SEG_BUTTON =
+    "grid w-9 cursor-pointer place-items-center rounded-md text-fg-subtle transition-colors hover:text-fg aria-pressed:bg-control aria-pressed:text-fg";
+const ICON_BUTTON =
+    "inline-grid size-7.5 flex-none cursor-pointer place-items-center rounded-lg text-fg-muted transition-colors enabled:hover:bg-hover enabled:hover:text-fg enabled:active:bg-pressed disabled:cursor-not-allowed disabled:text-fg-disabled aria-pressed:bg-control aria-pressed:text-fg";
 const SWATCH =
-    "aspect-square min-w-0 cursor-pointer rounded-[3px] p-0 ring-1 ring-black/20 ring-inset [background:var(--swatch)] aria-pressed:outline-2 aria-pressed:outline-offset-1 aria-pressed:outline-foreground";
+    "aspect-square min-w-0 cursor-pointer rounded-sm p-0 ring-1 ring-black/10 ring-inset [background:var(--swatch)] aria-pressed:outline-2 aria-pressed:outline-offset-1 aria-pressed:outline-fg";
 
 export function el<K extends keyof HTMLElementTagNameMap>(
     tag: K,
@@ -40,19 +44,27 @@ export function button(
 
 export type Control<T> = { set(value: T): void };
 
-/** Options are [value, caption, tooltip]. */
+/** Options are [value, name, tooltip, glyph markup]. */
 export function makeSegmented<T extends string>(
     row: HTMLElement,
-    options: [T, string, string][],
+    options: [T, string, string, string][],
     initial: T,
     onPick: (value: T) => void
 ): Control<T> {
-    const buttons = options.map(([value, caption, tip]) => {
-        const node = button(row, SEG_BUTTON, caption, () => {
-            paint(value);
-            onPick(value);
-        });
+    const track = el("div", TRACK, row);
+    const buttons = options.map(([value, name, tip, glyph]) => {
+        const node = button(
+            track,
+            SEG_BUTTON,
+            "",
+            () => {
+                paint(value);
+                onPick(value);
+            },
+            name
+        );
         node.title = tip;
+        node.innerHTML = glyph;
         return { value, node };
     });
     const paint = (current: T) => {
@@ -69,17 +81,25 @@ export function makeSegmented<T extends string>(
 
 export function makeToggle(
     parent: HTMLElement,
-    caption: string,
+    name: string,
     tip: string,
+    glyph: string,
     initial: boolean,
     onChange: (value: boolean) => void
 ): Control<boolean> {
     let value = initial;
-    const node = button(parent, SEG_BUTTON, caption, () => {
-        paint(!value);
-        onChange(value);
-    });
+    const node = button(
+        parent,
+        ICON_BUTTON,
+        "",
+        () => {
+            paint(!value);
+            onChange(value);
+        },
+        name
+    );
     node.title = tip;
+    node.innerHTML = glyph;
     const paint = (next: boolean) => {
         value = next;
         node.setAttribute("aria-pressed", String(next));
@@ -90,12 +110,14 @@ export function makeToggle(
 
 export function makeAction(
     parent: HTMLElement,
-    caption: string,
+    name: string,
     tip: string,
+    glyph: string,
     onClick: () => void
 ): HTMLButtonElement {
-    const node = button(parent, ACTION_BUTTON, caption, onClick);
+    const node = button(parent, `${ICON_BUTTON} ml-auto`, "", onClick, name);
     node.title = tip;
+    node.innerHTML = glyph;
     return node;
 }
 
@@ -106,9 +128,21 @@ export function makeInlineSelect(
     initial: string,
     onPick: (value: string) => void
 ): Control<string> {
-    const wrap = el("label", `flex items-center gap-1.5 ${LABEL}`, parent);
+    const wrap = el(
+        "label",
+        `flex min-w-0 items-center gap-2 ${LABEL}`,
+        parent
+    );
     wrap.append(label);
-    const select = el("select", `${INPUT} px-1 text-foreground`, wrap);
+    const box = el("span", "relative min-w-0 flex-1", wrap);
+    const select = el("select", SELECT, box);
+    box.insertAdjacentHTML(
+        "beforeend",
+        icon(
+            ICONS.chevron,
+            "pointer-events-none absolute top-2 right-2.5 size-4 text-fg-subtle"
+        )
+    );
     for (const [value, caption] of options) {
         const option = el("option", undefined, select);
         option.value = value;
@@ -131,13 +165,13 @@ export function makeColourInput(
 ): Control<string> & { wrap: HTMLElement } {
     const wrap = el(
         "label",
-        `flex basis-full items-center gap-1.5 ${LABEL}`,
+        `col-span-2 flex items-center gap-2 ${LABEL}`,
         parent
     );
     wrap.append(label);
     const input = el(
         "input",
-        `h-6 min-w-0 flex-1 cursor-pointer rounded-sm border border-border bg-background p-0.5 ${FOCUS}`,
+        `h-8 min-w-0 flex-1 cursor-pointer rounded-lg border border-line bg-subtle p-1 transition-colors hover:bg-hover [&::-moz-color-swatch]:rounded-md [&::-moz-color-swatch]:border-0 [&::-webkit-color-swatch]:rounded-md [&::-webkit-color-swatch]:border-0 [&::-webkit-color-swatch-wrapper]:p-0 ${FOCUS}`,
         wrap
     );
     input.type = "color";

@@ -12,6 +12,7 @@ import {
 } from "../src/shared/spec";
 import { cellCanvas, exportPng, type Rgb } from "./export";
 import { createHistory } from "./lib/history";
+import { ICONS, icon } from "./lib/icons";
 import { isField, keyAction } from "./lib/keys";
 import {
     DEFAULT_CUSTOM,
@@ -112,11 +113,26 @@ const strokeValue = () => (tool === "eraser" ? -1 : colour);
 const toolControl = makeSegmented<Tool>(
     toolsRow,
     [
-        ["pencil", "Pencil", "Pencil: paint cells"],
-        ["eraser", "Eraser", "Eraser: clear cells"],
-        ["fill", "Fill", "Fill: flood an area with the colour"],
-        ["picker", "Pick", "Eyedropper: pick a colour from the grid"],
-        ["line", "Line", "Line: drag from one end to the other"],
+        ["pencil", "Pencil", "Pencil: paint cells", icon(ICONS.pencil)],
+        ["eraser", "Eraser", "Eraser: clear cells", icon(ICONS.eraser)],
+        [
+            "fill",
+            "Fill",
+            "Fill: flood an area with the colour",
+            icon(ICONS.fill),
+        ],
+        [
+            "picker",
+            "Pick",
+            "Eyedropper: pick a colour from the grid",
+            icon(ICONS.picker),
+        ],
+        [
+            "line",
+            "Line",
+            "Line: drag from one end to the other",
+            icon(ICONS.line, "size-4 -rotate-45 scale-125"),
+        ],
     ],
     tool,
     (next) => {
@@ -128,6 +144,7 @@ makeToggle(
     toolsRow,
     "Mirror",
     "Mirror: pencil, eraser and line also paint the left-right reflection",
+    icon(ICONS.mirror),
     mirror,
     (next) => {
         mirror = next;
@@ -138,6 +155,7 @@ const clearButton = makeAction(
     toolsRow,
     "Clear",
     "Clear: make every cell transparent",
+    icon(ICONS.deleteBin),
     clearAll
 );
 const sizeControl = makeInlineSelect(
