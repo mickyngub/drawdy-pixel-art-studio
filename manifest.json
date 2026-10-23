@@ -1,7 +1,7 @@
 {
     "driverId": "mickyngub.pixel-art-studio",
     "driverName": "Pixel Art Studio",
-    "driverVersion": "1.0.0",
+    "driverVersion": "1.0.1",
     "description": "Retro sprites, right on your board. Paint on a 16 to 64 pixel grid with Pencil, Fill, Line and Mirror, pick colours from the PICO-8, Game Boy or NES palette or mix 16 of your own, then click Place on board for a crisp sprite with a transparent background. Switch palettes and every pixel moves to the nearest colour. Select it later to keep drawing. Made for game jams, retros, lessons and sticker-happy boards.",
     "icon": "icon.png",
     "main": "main.js",

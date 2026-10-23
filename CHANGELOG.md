@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.0.1
+
+- the panel now uses Drawdy's own colours and font
+- the tools are an icon toolbar (Pencil, Eraser, Fill, Pick and Line), with Mirror and Clear set apart
+- restyled dropdowns, and the buttons stay at the bottom of the panel
+
 ## 1.0.0
 
 First public release
